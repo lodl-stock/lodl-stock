@@ -1,0 +1,62 @@
+version: "3.8"
+services:
+  auth:
+    hostname: auth
+    build: auth/
+    volumes:
+      - './auth/:/app'
+      - '/app/node_modules'
+    environment:
+      PORT: 5000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mariadb
+    command: bash -c "npm run server"
+    networks:
+      - db_auth
+      - auth_business
+      - auth_mailer
+
+  business:
+    hostname: business
+    build: business/
+    volumes:
+      - './business/:/app'
+      - '/app/node_modules'
+    environment:
+      PORT: 5001
+    ports:
+      - "5001:5001"
+    depends_on:
+      - mariadb
+      - auth
+    command: bash -c "npm run server"
+    networks:
+      - db_business
+      - auth_business
+
+  mailer:
+    hostname: mailer
+    build: mailer/
+    volumes:
+      - './mailer/:/app'
+      - '/app/node_modules'
+    environment:
+      PORT: 5002
+    ports:
+      - "5002:5002"
+    depends_on:
+      - mariadb
+      - auth
+    command: bash -c "npm run server"
+    networks:
+      - db_mailer
+      - auth_mailer
+
+networks:
+  db_auth:
+  db_business:
+  db_mailer:
+  auth_business:
+  auth_mailer:
