@@ -18,7 +18,6 @@ app.use(cors());
 
 app.use("/api/subscriptions", subscriptionRoutes);
 
-
 prisma.$connect().then(() => {
     console.log('Connected to MariaDB');
     server.listen(PORT, () => {

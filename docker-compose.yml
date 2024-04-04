@@ -45,6 +45,8 @@ services:
     environment:
       PORT: 5002
       DATABASE_URL: mysql://lodl-admin:changeme@mariadb:3306/lodl-stock
+      mailUser: changeme
+      mailPass: changeme
     ports:
       - "5002:5002"
     depends_on:
@@ -60,13 +62,15 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: changeme
       MYSQL_DATABASE: lodl-stock
-      MYSQL_USER: lodl-admin 
+      MYSQL_USER: lodl-admin
       MYSQL_PASSWORD: changeme
     ports:
       - "3306:3306"
     networks:
       - db_business
       - db_admin
+      - db_auth
+      - db_mailer
     restart: on-failure
     volumes:
       - db-mariadb:/var/lib/mysql

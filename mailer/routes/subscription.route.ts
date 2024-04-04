@@ -1,6 +1,8 @@
 import { Router } from "express";
 import * as nodemailer from "nodemailer";
 import validators from "../helpers/validators"
+import prisma from "../prisma_client";
+import { ConditionType } from "@prisma/client";
 
 const router = Router();
 
@@ -9,7 +11,7 @@ router.post("/", async (req, res) => {
     if (error) return res.send(error.details[0].message);
 
     try {
-        let { teamName, name, email, message } = req.body;
+        let { type, treshold, userId, productId } = req.body;
 
         let transporter = nodemailer.createTransport({
             service: "Gmail",
@@ -19,17 +21,26 @@ router.post("/", async (req, res) => {
             }
         });
 
+        let user = await prisma.user.findUnique({ where: { id: userId } });
+        if (!user) {
+            return res.send("This user does not exist!");
+        }
+        let product = await prisma.product.findUnique({ where: { id: productId } });
+        if (!product) {
+            return res.send("This product does not exist!");
+        }
+
         await transporter.sendMail({
-            from: '"' + teamName + '" <' + email + '>',
-            to: process.env.mailUser,
-            subject: `Mesaj nou de la ${name} din echipa "${teamName}", ${email}`,
-            html: `<p>${message}</p><br><b>Adresa de e-mail: ${email}</b>`
+            from: 'Lodl Stock <noreply@lodlstock.com>',
+            to: user.email,
+            subject: "Your Subscription",
+            html: `<p>Your subscription has been created. You'll be notified when <b>${product.name}'s</b> ${type == ConditionType.PRICE_BELOW ? "stock" : "price"} goes below ${treshold}.`
         });
 
         return res.send(undefined);
     } catch(e) {
         console.log(e)
-        return res.send("Contact failed!")
+        return res.send(`Failed to record subscription for ${req.body}!`);
     }
 })
 
