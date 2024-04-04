@@ -64,10 +64,23 @@ services:
     ports:
       - "3306:3306"
     networks:
-      - db_business 
+      - db_business
+      - db_admin
     restart: on-failure
     volumes:
       - db-mariadb:/var/lib/mysql
+
+  dbadmin:
+    image: phpmyadmin
+    depends_on:
+      - mariadb
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+    networks:
+      - db_admin
+    ports:
+      - "8080:80"
 
 networks:
   db_auth:
@@ -75,6 +88,7 @@ networks:
   db_mailer:
   auth_business:
   auth_mailer:
+  db_admin:
 
 volumes:
   db-mariadb:
