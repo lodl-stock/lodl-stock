@@ -54,9 +54,41 @@ services:
       - db_mailer
       - auth_mailer
 
+  mariadb:
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: changeme
+      MYSQL_DATABASE: lodl-stock
+      MYSQL_USER: lodl-admin 
+      MYSQL_PASSWORD: changeme
+    ports:
+      - "3306:3306"
+    networks:
+      - db_business
+      - db_admin
+    restart: on-failure
+    volumes:
+      - db-mariadb:/var/lib/mysql
+
+  dbadmin:
+    image: phpmyadmin
+    depends_on:
+      - mariadb
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+    networks:
+      - db_admin
+    ports:
+      - "8080:80"
+
 networks:
   db_auth:
   db_business:
   db_mailer:
   auth_business:
   auth_mailer:
+  db_admin:
+
+volumes:
+  db-mariadb:
