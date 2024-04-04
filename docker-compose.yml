@@ -44,12 +44,13 @@ services:
       - '/app/node_modules'
     environment:
       PORT: 5002
+      DATABASE_URL: mysql://lodl-admin:changeme@mariadb:3306/lodl-stock
     ports:
       - "5002:5002"
     depends_on:
       - mariadb
       - auth
-    command: bash -c "npm run server"
+    command: bash -c "npm run server:watch"
     networks:
       - db_mailer
       - auth_mailer
