@@ -1,8 +1,7 @@
 import { Router } from "express";
-import * as nodemailer from "nodemailer";
 import validators from "../helpers/validators"
 import prisma from "../prisma_client";
-import { ConditionType } from "@prisma/client";
+import { confirm } from "../emails";
 
 const router = Router();
 
@@ -11,31 +10,29 @@ router.post("/", async (req, res) => {
     if (error) return res.send(error.details[0].message);
 
     try {
-        let { type, treshold, userId, productId } = req.body;
-
-        let transporter = nodemailer.createTransport({
-            service: "Gmail",
-            auth: {
-                user: process.env.mailUser,
-                pass: process.env.mailPass
-            }
-        });
+        let { type, treshold, userId, storeProductId } = req.body;
 
         let user = await prisma.user.findUnique({ where: { id: userId } });
         if (!user) {
             return res.send("This user does not exist!");
         }
-        let product = await prisma.product.findUnique({ where: { id: productId } });
-        if (!product) {
+        let storeProduct = await prisma.storeProduct.findUnique({
+            where: { id: storeProductId },
+            include: { product: true }
+        });
+        if (!storeProduct) {
             return res.send("This product does not exist!");
         }
 
-        await transporter.sendMail({
-            from: 'Lodl Stock <noreply@lodlstock.com>',
-            to: user.email,
-            subject: "Your Subscription",
-            html: `<p>Your subscription has been created. You'll be notified when <b>${product.name}'s</b> ${type == ConditionType.PRICE_BELOW ? "stock" : "price"} goes below ${treshold}.`
-        });
+        const sub = await prisma.subscription.create({
+            data: {
+                "type": type,
+                "treshold": treshold,
+                "userId": userId,
+                "storeProductId": storeProductId,
+            }});
+
+        await confirm(user, storeProduct.product, sub);
 
         return res.send(undefined);
     } catch(e) {

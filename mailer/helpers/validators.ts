@@ -3,16 +3,16 @@ import joi from 'joi';
 const subscriptionCreate = joi.object({
     type:           joi.string().required().trim().valid('PRICE_BELOW', 'STOCK_BELOW'),
     treshold:       joi.number().positive().messages({
-        'any.required': `Please provide a value for points`,
+        'any.required': `Please provide a value for treshold`,
         'number.positive': `Alert treshold should be a positive number`
     }),
-    userId:         joi.string().required().trim().messages({
-        'string.empty': `User id cannot be empty!`,
-        'any.required': `Please provide a value for User id!`
+    userId:         joi.number().positive().messages({
+        'any.required': `Please provide a value for user id`,
+        'number.positive': `Alert treshold should be a positive number`
     }),
-    productId:      joi.string().required().trim().messages({
-        'string.empty': 'User id cannot be empty!',
-        'any.required': `Please provide a value for User id!`
+    storeProductId: joi.number().positive().messages({
+        'any.required': `Please provide a value for product id`,
+        'number.positive': `Alert treshold should be a positive number`
     }),
 });
 
