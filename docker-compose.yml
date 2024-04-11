@@ -38,21 +38,23 @@ services:
 
   mailer:
     hostname: mailer
-    build: mailer/
+    build:
+      dockerfile: mailer/Dockerfile
+      context: ./
     volumes:
       - './mailer/:/app'
       - '/app/node_modules'
     environment:
       PORT: 5002
       DATABASE_URL: mysql://lodl-admin:changeme@mariadb:3306/lodl-stock
-      mailUser: changeme
-      mailPass: changeme
+      user: ${user}
+      pass: ${pass}
     ports:
       - "5002:5002"
     depends_on:
       - mariadb
       - auth
-    command: bash -c "npm run server:watch"
+    command: bash -c "npx prisma db push ; npm run server:watch"
     networks:
       - db_mailer
       - auth_mailer
