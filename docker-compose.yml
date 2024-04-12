@@ -20,18 +20,21 @@ services:
 
   business:
     hostname: business
-    build: business/
+    build:
+      dockerfile: business/Dockerfile
+      context: ./
     volumes:
-      - './business/:/app'
+      - './business/src:/app/src'
       - '/app/node_modules'
     environment:
       PORT: 5001
+      DATABASE_URL: mysql://lodl-admin:changeme@mariadb:3306/lodl-stock
     ports:
       - "5001:5001"
     depends_on:
       - mariadb
       - auth
-    command: bash -c "npm run server"
+    command: bash -c "npx prisma db push --accept-data-loss && npm run server:watch"
     networks:
       - db_business
       - auth_business

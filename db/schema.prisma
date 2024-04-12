@@ -42,7 +42,6 @@ model StoreProduct {
   product         Product   @relation(fields: [productId], references: [id])
   productId       Int
 
-  stock           Int
   price           Int
 
   subscriptions   Subscription[]
