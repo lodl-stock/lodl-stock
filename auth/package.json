@@ -1,20 +1,22 @@
 {
-  "name": "business",
+  "name": "auth",
   "version": "0.1.0",
-  "description": "Business service for LodlStock",
-  "main": "index.ts",
+  "description": "Auth service for LodlStock",
+  "main": "src/index.ts",
   "scripts": {
     "build": "npx tsc",
     "start": "node build/index.js",
-    "dev": "tsx watch index",
+    "dev": "tsx watch src/index",
     "watch": "npx tsc --watch",
     "server": "npx tsc && npm run dev",
     "server:watch": "concurrently --kill-others \"npm run watch\" \"npm run dev\""
   },
   "keywords": [],
   "dependencies": {
+    "@prisma/client": "^4.14.0",
     "async": "^3.2.4",
     "axios": "^1.5.1",
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.19.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
@@ -22,8 +24,7 @@
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "nodemailer": "^6.7.8",
-    "prisma": "^5.12.0",
-    "@prisma/client": "^4.14.0"
+    "prisma": "^5.12.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

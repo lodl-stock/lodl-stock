@@ -1,5 +1,6 @@
 version: "3.8"
 services:
+<<<<<<< HEAD
   # auth:
   #   hostname: auth
   #   build: auth/
@@ -17,6 +18,28 @@ services:
   #     - db_auth
   #     - auth_business
   #     - auth_mailer
+=======
+  auth:
+    hostname: auth
+    build: 
+      dockerfile: auth/Dockerfile
+      context: ./
+    volumes:
+      - './auth/src:/app/src'
+      - '/app/node_modules'
+    environment:
+      PORT: 5000
+      DATABASE_URL: mysql://lodl-admin:changeme@mariadb:3306/lodl-stock
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mariadb
+    command: bash -c "npm run server:watch"
+    networks:
+      - db_auth
+      - auth_business
+      - auth_mailer
+>>>>>>> 438428f ([NEW] added register and login routes in the auth service)
 
   business:
     hostname: business
