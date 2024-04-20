@@ -10,15 +10,15 @@ const checkValidUserWithRole = async (req: any, res: Response, next:NextFunction
     }
 }
 
-const clientMiddleware = (req:any, res:Response, next:NextFunction) =>{
+const clientMiddleware = (req: any, res: Response, next: NextFunction) =>{
     checkValidUserWithRole(req, res, next, 0)
 };
 
-const storeAdminMiddleware = (req:any, res:Response, next:NextFunction)=>{
+const storeAdminMiddleware = (req: any, res: Response, next: NextFunction) => {
     checkValidUserWithRole(req, res, next, 0);
 }
 
-const adminMiddleware = (req:any, res:Response, next:NextFunction)=>{
+const adminMiddleware = (req: any, res: Response, next: NextFunction) => {
     checkValidUserWithRole(req, res, next, 0);
 }
 

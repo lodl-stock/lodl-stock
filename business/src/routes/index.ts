@@ -1,3 +1,3 @@
-import userRoutes from "./users.route";
+import stockRoutes from "./stocks.route";
 
-export { userRoutes };
+export { stockRoutes };

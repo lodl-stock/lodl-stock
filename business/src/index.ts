@@ -5,7 +5,7 @@ import cors from "cors";
 import * as dotenv from "dotenv";
 import prisma from "./prisma_client";
 import seed from "./seed/seeder";
-import { userRoutes } from "./routes";
+import { stockRoutes } from "./routes";
 
 dotenv.config()
 
@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use("/api/users", userRoutes)
+app.use("/api/stocks", stockRoutes)
 
 prisma.$connect().then(() => {
     console.log('Connected to MariaDB');
