@@ -1,8 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
 import http from "http";
-import https from "https";
-import fs from "fs";
 import cors from "cors";
 import * as dotenv from "dotenv";
 import { authRoutes } from "./routes";
@@ -13,9 +11,7 @@ dotenv.config()
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-
 const server = http.createServer(app);
-
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

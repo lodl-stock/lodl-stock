@@ -5,7 +5,7 @@ import prisma from "../prisma_client";
 const router = Router();
 
 // Get total stock across all stores of all products
-router.get('/', adminMiddleware, async (req : any, res) => {
+router.get('/', adminMiddleware, async (_ : any, res) => {
     const stocks = await prisma.product.findMany({
         include: {
             _count: {
@@ -38,10 +38,18 @@ router.get('/:productId/:storeId', clientMiddleware, async (req, res) => {
     const storeId = Number(req.params.storeId);
     if (Number.isNaN(storeId)) return res.json("Invalid storeId");
 
-    const stocks = await prisma.storeProduct.count({
+    const storeProduct = await prisma.storeProduct.findFirst({
+        where: { storeId: storeId, productId: productId }
+    });
+
+    if (!storeProduct) {
+        console.log({ where: { storeId: storeId, productId: productId } });
+        return res.status(404).json("Product does not exist at this store!");
+    }
+
+    const stocks = await prisma.storeProductInstance.count({
         where: {
-            storeId: storeId,
-            productId: productId
+            storeProductId: storeProduct.id
         }
     })
     return res.json(stocks);
