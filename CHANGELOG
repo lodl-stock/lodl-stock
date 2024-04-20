@@ -1,0 +1,50 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [0.0.4] - 2024-04-20
+
+### Added
+
+- Stock fetching functionality to the database
+- Login and register functionality to the authentication service.
+- Route for checking autorization of a request to the authentication service.
+- This CHANGELOG file.
+
+### Changed
+
+- Product stock is now managed using StoreProductInstance for easier atomic
+  changes.
+- Dockerfiles now generate prisma types at build time.
+- Schema changes are pushed when container comes online.
+
+### Fixed
+
+- docker compose file was left broken by a rebase.
+
+## [0.0.3] - 2024-04-11
+
+### Added
+
+- Email alerts in the subscription mailing service (by leveraging a cronjob)
+- Stores and StoreProduct as database entities
+
+### Changed
+
+- Moved schema.prisma to project root so it can be used by all three services
+  without conflicts
+
+
+## [0.0.2] - 2024-04-04
+
+### Added
+
+- Base functionalities to the subscription mailing service.
+- Basic structure to the business service.
+
+## [0.0.1] - 2024-04-04
+
+### Added
+
+- Dockerfiles and docker compose file for the app services.
+- Database and database management server to docker compose file.
