@@ -47,6 +47,8 @@ model StoreProduct {
 
   instances       StoreProductInstance[]
   subscriptions   Subscription[]
+
+  @@unique([storeId, productId])
 }
 
 model StoreProductInstance {

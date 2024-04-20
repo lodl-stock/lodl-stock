@@ -34,15 +34,6 @@ function randomSubarray<T>(arr: Array<T>, size: number): Array<T> {
   return shuffled.slice(0, size);
 }
 
-const users = [
-  {
-    "email": "maria.teaca16@gmail.com",
-    "first_name": "Maria",
-    "last_name": "Teaca",
-    "phone": "0773360302"
-  },
-];
-
 const products = [
   {
     stock: 5,
@@ -94,13 +85,13 @@ async function main(del: boolean) {
 
   if (del) {
     console.log(`deleted ${(await prisma.subscription.deleteMany()).count} from subscription`);
+    console.log(`deleted ${(await prisma.storeProductInstance.deleteMany()).count} from storeProductInstance`);
     console.log(`deleted ${(await prisma.storeProduct.deleteMany()).count} from storeProduct`);
     console.log(`deleted ${(await prisma.product.deleteMany()).count} from product`);
-    console.log(`deleted ${(await prisma.user.deleteMany()).count} from user`);
+    console.log(`deleted ${(await prisma.store.deleteMany()).count} from store`);
   }
-  seedOne(prisma.product, products.map(p => p.product), "name");
-  seedOne(prisma.user, users, "email");
-  seedOne(prisma.store, stores, "name");
+  await seedOne(prisma.product, products.map(p => p.product), "name");
+  await seedOne(prisma.store, stores, "name");
 
   products.map(async (p) => {
     const product = await prisma.product.findFirst({ where: { name: p.product.name } });
@@ -108,17 +99,30 @@ async function main(del: boolean) {
     if (!product) return;
 
     stores.forEach(async (s: any) => {
-      const existing = await prisma.storeProduct.findMany({
-        where: { productId: product.id, storeId: s.id }
-      });
-      if (existing.length >= p.stock) return;
-
-      for (let i = 0; i != p.stock - existing.length; i++) {
-        await prisma.storeProduct.create({
+      let storeProduct;
+      try {
+        storeProduct = await prisma.storeProduct.findFirstOrThrow({
+          where: { productId: product.id, storeId: s.id }
+        });
+      } catch (e) {
+        storeProduct = await prisma.storeProduct.create({
           data: {
             price: p.price,
             storeId: s.id,
             productId: product.id
+          }
+        });
+      }
+
+      const existing = await prisma.storeProductInstance.findMany({
+        where: { storeProductId: storeProduct.id }
+      })
+      if (existing.length >= p.stock) return;
+
+      for (let i = 0; i != p.stock - existing.length; i++) {
+        await prisma.storeProductInstance.create({
+          data: {
+            storeProductId: storeProduct.id
           }
         });
       }
