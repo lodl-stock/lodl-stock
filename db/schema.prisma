@@ -24,7 +24,7 @@ model Store {
   id              Int       @id @default(autoincrement())
   name            String
 
-  products        StoreProduct[]
+  storeProducts   StoreProduct[]
 }
 
 model Product {
@@ -37,17 +37,22 @@ model Product {
 model StoreProduct {
   id              Int       @id @default(autoincrement())
 
-  store           Store     @relation(fields: [storeId], references: [id])
-  storeId         Int
-  product         Product   @relation(fields: [productId], references: [id])
-  productId       Int
-
-  stock           Int
   price           Int
 
-  subscriptions   Subscription[]
+  product         Product   @relation(fields: [productId], references: [id])
+  productId       Int
+  store           Store     @relation(fields: [storeId], references: [id])
+  storeId         Int
 
-  @@index([storeId, productId])
+  instances       StoreProductInstance[]
+  subscriptions   Subscription[]
+}
+
+model StoreProductInstance {
+  id              Int            @id @default(autoincrement())
+
+  storeProduct    StoreProduct   @relation(fields: [storeProductId], references: [id])
+  storeProductId  Int
 }
 
 enum ConditionType {
@@ -56,9 +61,9 @@ enum ConditionType {
 }
 
 model Subscription {
-  user            User     @relation(fields: [userId], references: [id])
+  user            User         @relation(fields: [userId], references: [id])
   userId          Int
-  product         StoreProduct @relation(fields: [storeProductId], references: [id])
+  storeProduct    StoreProduct @relation(fields: [storeProductId], references: [id])
   storeProductId  Int
 
   type            ConditionType

@@ -1,12 +1,21 @@
 FROM node:16.14.2
+
+RUN su node
+
 RUN npm install -g nodemon
 
 WORKDIR /app
 
 ENV PATH /app/node_modules/.bin:$PATH
 
-COPY package.json ./
-COPY package-lock.json ./
-RUN npm i --silent
+COPY business/package.json ./
+COPY business/package-lock.json ./
+RUN npm i
+COPY business .
 
-COPY . ./
+# Copy global prisma schema into project
+COPY db/schema.prisma ./prisma/schema.prisma
+RUN npx prisma generate
+
+RUN su
+RUN chown -R node:node "/root/.npm"
