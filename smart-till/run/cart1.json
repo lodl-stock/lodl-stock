@@ -1,0 +1,17 @@
+{
+    "storeId": 5,
+    "cart": [
+        {
+            "storeProduct": 1,
+            "count": 1
+        },
+        {
+            "storeProduct": 1,
+            "count": 2
+        },
+        {
+            "storeProduct": 1,
+            "count": 3
+        }
+    ]
+}
