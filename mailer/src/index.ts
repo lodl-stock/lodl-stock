@@ -8,6 +8,7 @@ import prisma from "./prisma_client";
 import seed from "./prisma/seeder";
 import cron from 'node-cron';
 import { alert } from "./emails";
+import { mailCount, register } from "./prometheus";
 
 dotenv.config()
 
@@ -20,6 +21,10 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use("/api/subscriptions", subscriptionRoutes);
+app.get('/metrics', async (_, res) => {
+  res.setHeader('Content-type', register.contentType);
+  res.end(await register.metrics());
+});
 
 prisma.$connect().then(() => {
     console.log('Connected to MariaDB');
@@ -45,5 +50,8 @@ cron.schedule('* * * * *', async () => {
     switch(s.type) {
         case "PRICE_BELOW": return s.storeProduct.price < s.treshold
         case "STOCK_BELOW": return s.storeProduct._count.instances < s.treshold
-  }}).map((s) => alert(s.user, s.storeProduct.product, s));
+  }}).map((s) => {
+    mailCount.inc();
+    alert(s.user, s.storeProduct.product, s);
+  });
 });

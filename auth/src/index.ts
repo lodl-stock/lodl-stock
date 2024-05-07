@@ -5,6 +5,7 @@ import cors from "cors";
 import * as dotenv from "dotenv";
 import { authRoutes } from "./routes";
 import prisma from "./prisma_client";
+import { register } from "./prometheus";
 
 dotenv.config()
 
@@ -18,6 +19,10 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use("/api/auth", authRoutes);
+app.get('/metrics', async (_, res) => {
+    res.setHeader('Content-type', register.contentType);
+    res.end(await register.metrics());
+});
 
 prisma.$connect().then(() => {
     console.log('Connected to MariaDB');
