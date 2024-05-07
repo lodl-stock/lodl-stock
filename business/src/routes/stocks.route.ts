@@ -6,15 +6,7 @@ const router = Router();
 
 // Get total stock across all stores of all products
 router.get('/', adminMiddleware, async (_ : any, res) => {
-    const stocks = await prisma.product.findMany({
-        include: {
-            _count: {
-                select: {
-                    instances: true
-                }
-            }
-        }
-    });
+    const stocks = await prisma.storeProductInstance.count();
     return res.json(stocks);
 });
 
@@ -23,9 +15,9 @@ router.get('/:productId', adminMiddleware, async (req, res) => {
     const productId = Number(req.params.productId);
     if (Number.isNaN(productId)) return res.json("Invalid productId");
 
-    const stocks = await prisma.storeProduct.groupBy({
-        by: ['storeId', 'productId'],
-        where: { productId: productId },
+    const stocks = await prisma.storeProductInstance.groupBy({
+        by: ['storeProductId'],
+        where: { storeProduct: { productId: productId } },
         _count: { _all: true }
     })
     return res.json(stocks);
@@ -51,7 +43,7 @@ router.get('/:productId/:storeId', clientMiddleware, async (req, res) => {
         where: {
             storeProductId: storeProduct.id
         }
-    })
+    });
     return res.json(stocks);
 });
 
