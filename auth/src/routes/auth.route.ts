@@ -3,10 +3,12 @@ import * as bcrypt from 'bcrypt';
 import prisma from "../prisma_client";
 import validators from "../helpers/validators";
 import jwt from "jsonwebtoken";
+import { accessCount } from "../prometheus";
 
 const router = Router();
 
 router.post("/register", async (req, res) => {
+    accessCount.inc();
     const { error, value: body } = validators.register.validate(req.body);
 
     if (error) return res.send(error.details[0].message);
@@ -45,6 +47,7 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
+    accessCount.inc();
     const { error, value: body } = validators.login.validate(req.body);
 
     if (error) return res.send(error.details[0].message);
@@ -74,6 +77,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/check", async (req, res) => {
+    accessCount.inc();
     if (!req.headers.authorization) {
         console.log("Token not found.");
         return res.status(403).json("Unauthorized access");

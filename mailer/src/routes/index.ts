@@ -1,3 +1,3 @@
 import subscriptionRoutes from "./subscription.route";
 
-export {subscriptionRoutes};
+export { subscriptionRoutes };

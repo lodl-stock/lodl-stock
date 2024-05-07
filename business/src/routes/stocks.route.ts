@@ -1,17 +1,20 @@
 import {Router} from "express";
 import { adminMiddleware, clientMiddleware } from "../middlewares";
 import prisma from "../prisma_client";
+import { accessCount } from "../prometheus";
 
 const router = Router();
 
 // Get total stock across all stores of all products
 router.get('/', adminMiddleware, async (_ : any, res) => {
+    accessCount.inc();
     const stocks = await prisma.storeProductInstance.count();
     return res.json(stocks);
 });
 
 // Get stock of product identified by productId by store
 router.get('/:productId', adminMiddleware, async (req, res) => {
+    accessCount.inc();
     const productId = Number(req.params.productId);
     if (Number.isNaN(productId)) return res.json("Invalid productId");
 
@@ -25,6 +28,7 @@ router.get('/:productId', adminMiddleware, async (req, res) => {
 
 // Get stock of product identified by productId at store identified by storeId
 router.get('/:productId/:storeId', clientMiddleware, async (req, res) => {
+    accessCount.inc();
     const productId = Number(req.params.productId);
     if (Number.isNaN(productId)) return res.json("Invalid productId");
     const storeId = Number(req.params.storeId);

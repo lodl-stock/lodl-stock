@@ -2,10 +2,12 @@ import { Router } from "express";
 import validators from "../helpers/validators"
 import prisma from "../prisma_client";
 import { confirm } from "../emails";
+import { accessCount } from "../prometheus";
 
 const router = Router();
 
 router.post("/", async (req, res) => {
+    accessCount.inc();
     const { error } = validators.subscriptionCreate.validate(req.body);
     if (error) return res.send(error.details[0].message);
 

@@ -17,11 +17,12 @@ services:
       - mariadb
     # Auth service should start first after db service, so let it update
     # database schema
-    command: bash -c "sleep 10; npx prisma db push --accept-data-loss && npm run server:watch"
+    command: bash -c "sleep 10 ; npx prisma db push --accept-data-loss && npm run server:watch"
     networks:
       - db_auth
       - auth_business
       - auth_mailer
+      - prometheus
 
   business:
     hostname: business
@@ -39,10 +40,11 @@ services:
     depends_on:
       - mariadb
       - auth
-    command: bash -c "sleep 10; npm run server:watch"
+    command: bash -c "sleep 10 ; npm run server:watch"
     networks:
       - db_business
       - auth_business
+      - prometheus
 
   mailer:
     hostname: mailer
@@ -63,10 +65,11 @@ services:
       - mariadb
       - business
       - auth
-    command: bash -c "sleep 10; npm run server:watch"
+    command: bash -c "sleep 10 ; npm run server:watch"
     networks:
       - db_mailer
       - auth_mailer
+      - prometheus
 
   mariadb:
     image: mariadb:latest
@@ -98,6 +101,20 @@ services:
     ports:
       - "8080:80"
 
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - prometheus:/prometheus
+      - ./prometheus:/etc/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - prometheus
+    depends_on:
+      - auth
+      - business
+      - mailer
+
 networks:
   db_auth:
   db_business:
@@ -105,6 +122,8 @@ networks:
   auth_business:
   auth_mailer:
   db_admin:
+  prometheus:
 
 volumes:
   db-mariadb:
+  prometheus:
