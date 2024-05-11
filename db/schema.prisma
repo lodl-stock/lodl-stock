@@ -19,6 +19,7 @@ model User {
   password        String
 
   subscriptions   Subscription[]
+  admin           Boolean
 }
 
 model Store {
