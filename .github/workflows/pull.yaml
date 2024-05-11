@@ -15,6 +15,7 @@ jobs:
           username: ${{secrets.USER}}
           debug: true
           script: |
+            cd /home/${{secrets.USER}}
             ls lodl-stock || git clone https://github.com/lodl-stock/lodl-stock.git
             cd lodk-stock/
             git checkout main
