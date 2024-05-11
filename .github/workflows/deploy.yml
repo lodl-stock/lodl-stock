@@ -25,7 +25,7 @@ jobs:
           debug: true
           script: |
             ip a s
-            docker swarm init --advertise-addr ${{secrets.DOCKER_PG_PRIV_URL}}
+            docker swarm init --advertise-addr ${{secrets.ADV_ADDR}}
             echo "Swarm init"
             docker compose -f stack.yml build
             echo "Stack built"
