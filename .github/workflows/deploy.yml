@@ -21,6 +21,7 @@ jobs:
         with:
           key: ${{secrets.SSH_PRIVATE_KEY}}
           host: ${{secrets.DOCKER_PG_URL}}
+          username: ${{secrets.DOCKER_PG_USERNAME}}
           debug: true
           script: |
             ip a s
