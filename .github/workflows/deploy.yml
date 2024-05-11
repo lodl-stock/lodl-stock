@@ -20,7 +20,7 @@ jobs:
         uses: appleboy/ssh-action@v0.1.2
         with:
           key: ${{secrets.SSH_PRIVATE_KEY}}
-          host: ${{secrets.HOST}}
+          host: ${{secrets.DOCKER_PG_URL}}
           debug: true
           script: |
             ip a s
