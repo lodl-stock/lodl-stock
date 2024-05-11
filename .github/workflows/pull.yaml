@@ -11,8 +11,8 @@ jobs:
         uses: appleboy/ssh-action@v0.1.2
         with:
           key: ${{secrets.SSH_PRIVATE_KEY}}
-          host: ${{secrets.DOCKER_PG_URL}}
-          username: ${{secrets.DOCKER_PG_USERNAME}}
+          host: ${{secrets.HOST}}
+          username: ${{secrets.USER}}
           debug: true
           script: |
             ls lodl-stock || git pull https://github.com/lodl-stock/lodl-stock.git
