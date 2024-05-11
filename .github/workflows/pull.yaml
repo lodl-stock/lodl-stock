@@ -17,7 +17,7 @@ jobs:
           script: |
             cd /home/${{secrets.USER}}
             ls lodl-stock || git clone https://github.com/lodl-stock/lodl-stock.git
-            cd lodk-stock/
+            cd lodl-stock/
             git checkout main
             git fetch origin
             git reset --hard origin/main
