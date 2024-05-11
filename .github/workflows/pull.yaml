@@ -12,6 +12,7 @@ jobs:
         with:
           key: ${{secrets.SSH_PRIVATE_KEY}}
           host: ${{secrets.HOST}}
+          username: ${{secrets.USER}}
           debug: true
           script: |
             ls lodl-stock || git clone https://github.com/lodl-stock/lodl-stock.git
