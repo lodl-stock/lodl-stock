@@ -1,0 +1,18 @@
+name: pull-code
+
+jobs:
+  pull-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH Remote Commands
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          host: ${{secrets.DOCKER_PG_URL}}
+          debug: true
+          script: |
+            ls lodl-stock || git pull https://github.com/lodl-stock/lodl-stock.git
+            cd lodk-stock/
+            git checkout main
+            git fetch origin
+            git reset --hard origin/main
