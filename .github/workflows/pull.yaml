@@ -14,7 +14,7 @@ jobs:
           host: ${{secrets.DOCKER_PG_URL}}
           debug: true
           script: |
-            ls lodl-stock || git pull https://github.com/lodl-stock/lodl-stock.git
+            ls lodl-stock || git clone https://github.com/lodl-stock/lodl-stock.git
             cd lodk-stock/
             git checkout main
             git fetch origin
