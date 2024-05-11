@@ -16,7 +16,7 @@ jobs:
           debug: true
           script: |
             ls lodl-stock || git pull https://github.com/lodl-stock/lodl-stock.git
-            cd lodk-stock/
+            cd lodl-stock/
             git checkout main
             git fetch origin
             git reset --hard origin/main
