@@ -39,7 +39,7 @@ router.post("/register", async (req, res) => {
             }
         });
 
-        return res.send(200).json({ ...new_user, password: "" });
+        return res.status(200).json({ ...new_user, password: "" });
     } catch(err) {
         console.log("[auth] ", err);
         return res.send(`Failed to register user ${req.body}`);

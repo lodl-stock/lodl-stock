@@ -98,17 +98,36 @@ services:
 
   prometheus:
     image: prom/prometheus:latest
+    container_name: prometheus
     volumes:
-      - prometheus:/prometheus
+      - prom_data:/prometheus
       - ./prometheus:/etc/prometheus
     ports:
       - "9090:9090"
     networks:
       - prometheus
+      - network_grafana
     depends_on:
       - auth
       - business
       - mailer
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    depends_on:
+      - prometheus
+    ports:
+      - '3000:3000'
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASS}
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/datasources
+      - grafana-storage:/var/lib/grafana
+    networks:
+      - network_grafana
 
 networks:
   db_auth:
@@ -118,7 +137,9 @@ networks:
   auth_mailer:
   db_admin:
   prometheus:
+  network_grafana:
 
 volumes:
   db-mariadb:
-  prometheus:
+  prom_data:
+  grafana-storage:
