@@ -18,6 +18,7 @@ jobs:
         with:
           key: ${{secrets.SSH_PRIVATE_KEY}}
           host: ${{secrets.DOCKER_PG_URL}}
+          debug: true
           script: |
             ip a s
             docker swarm init --advertise-addr ${{secrets.DOCKER_PG_PRIV_URL}}
