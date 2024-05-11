@@ -1,4 +1,7 @@
 name: pull-code
+on:
+  workflow_dispatch:
+  workflow_call:
 
 jobs:
   pull-code:
