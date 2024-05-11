@@ -14,10 +14,6 @@ jobs:
           host: ${{secrets.DOCKER_PG_URL}}
           username: ${{secrets.DOCKER_PG_USERNAME}}
           debug: true
-          # port: 8022
-          # use_insecure_cipher: true
-          proxy_port: 8022
-          proxy_use_insecure_cipher: true
           script: |
             ls lodl-stock || git pull https://github.com/lodl-stock/lodl-stock.git
             cd lodk-stock/
