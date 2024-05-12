@@ -1,0 +1,30 @@
+_format_version: "2.1"
+_transform: true
+
+services:
+  - name: business-service
+    url: http://business:5001/api
+    routes:
+      - name: business-service-route
+        paths: 
+          - /business
+        strip_path: true
+
+  - name: auth-service
+    url: http://auth:5000/api/auth
+    routes:
+      - name: auth-service-route
+        paths: 
+          - /auth
+        strip_path: true
+          
+  - name: mailer-service
+    url: http://mailer:5002/api
+    routes:
+      - name: mailer-service-route
+        paths: 
+          - /mailer
+        strip_path: true
+
+plugins:
+  - name: prometheus 
