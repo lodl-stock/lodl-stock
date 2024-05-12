@@ -14,20 +14,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Install curl
+        run: sudo apt-get update && sudo apt-get install -y curl
 
-      - name: SSH Remote Commands
-        uses: appleboy/ssh-action@v0.1.2
-        with:
-          key: ${{secrets.SSH_PRIVATE_KEY}}
-          host: ${{secrets.HOST}}
-          username: ${{secrets.USER}}
-          debug: true
-          script: |
-            ip a s
-            docker swarm init --advertise-addr ${{secrets.ADV_ADDR}}
-            echo "Swarm init"
-            docker compose -f stack.yml build
-            echo "Stack built"
-            docker stack deploy --compose-file stack.yml lodl-stock
-            echo "Stack deployed!"
+      - name: Deploy through Portainer on DigitalOcean
+        run: |
+          curl -k -XPOST http://104.248.131.77:9000/api/stacks/webhooks/bb919906-8f3b-4675-8b95-b0a678fc8336
