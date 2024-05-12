@@ -147,7 +147,7 @@ services:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_USER}
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASS}
     volumes:
-      - /home/lodl/lodl-stock//grafana:/etc/grafana/provisioning/datasources
+      - /home/lodl/lodl-stock/grafana:/etc/grafana/provisioning/datasources
       - grafana-storage:/var/lib/grafana
     networks:
       - network_grafana
@@ -175,7 +175,7 @@ services:
       KONG_DECLARATIVE_CONFIG: /opt/kong/kong.yml
     command: "kong start"
     volumes:
-      - ./Kong:/opt/kong
+      - /home/lodl/lodl-stock/Kong:/opt/kong
     networks:
       - network_kong
       - network_grafana

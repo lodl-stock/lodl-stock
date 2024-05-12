@@ -19,4 +19,4 @@ jobs:
 
       - name: Deploy through Portainer on DigitalOcean
         run: |
-          curl -k -XPOST http://104.248.131.77:9000/api/stacks/webhooks/bb919906-8f3b-4675-8b95-b0a678fc8336
+          curl -k -XPOST http://104.248.131.77:9000/api/stacks/webhooks/7898ce5d-34ed-4112-a141-f94bf64d1917
