@@ -5,11 +5,13 @@ services:
     container_name: auth
     image: mariateaca/lodl-stock-auth:latest
     volumes:
+      # - './auth/src:/app/src'
       - '/app/node_modules'
     environment:
       PORT: ${AUTH_PORT}
       DATABASE_URL: mysql://${DB_USER}:${DB_PASSWORD}@mariadb:3306/${DB_DATABASE}
-      JWT_SECRET: ${JWT_SECRET} 
+    ports:
+      - "5000:5000"
     depends_on:
       - mariadb
     # Auth service should start first after db service, so let it update
@@ -27,10 +29,13 @@ services:
     container_name: business
     image: mariateaca/lodl-stock-business:latest
     volumes:
+      # - './business/src:/app/src'
       - '/app/node_modules'
     environment:
       PORT: ${BUSINESS_PORT}
       DATABASE_URL: mysql://${DB_USER}:${DB_PASSWORD}@mariadb:3306/${DB_DATABASE}
+    ports:
+      - "5001:5001"
     depends_on:
       - mariadb
       - auth
@@ -46,12 +51,15 @@ services:
     container_name: mailer
     image: mariateaca/lodl-stock-mailer:latest
     volumes:
+      # - './mailer/src:/app/src'
       - '/app/node_modules'
     environment:
       PORT: ${MAILER_PORT}
       DATABASE_URL: mysql://${DB_USER}:${DB_PASSWORD}@mariadb:3306/${DB_DATABASE}
       mailUser: ${mailUser}
       mailPass: ${mailPass}
+    ports:
+      - "5002:5002"
     depends_on:
       - mariadb
       - business
@@ -139,7 +147,7 @@ services:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_USER}
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASS}
     volumes:
-      - /home/lodl/lodl-stock/grafana:/etc/grafana/provisioning/datasources
+      - /home/lodl/lodl-stock//grafana:/etc/grafana/provisioning/datasources
       - grafana-storage:/var/lib/grafana
     networks:
       - network_grafana
@@ -167,7 +175,7 @@ services:
       KONG_DECLARATIVE_CONFIG: /opt/kong/kong.yml
     command: "kong start"
     volumes:
-      - /home/lodl/lodl-stock/Kong:/opt/kong
+      - ./Kong:/opt/kong
     networks:
       - network_kong
       - network_grafana
