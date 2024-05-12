@@ -15,9 +15,9 @@ jobs:
           CI_REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
         run: |
           docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
-          docker build --pull -t $CI_REGISTRY_USER/lodl-stock-auth -f auth/Dockerfile auth
+          docker build --pull -t $CI_REGISTRY_USER/lodl-stock-auth -f auth/Dockerfile .
           docker push $CI_REGISTRY_USER/lodl-stock-auth
-          docker build --pull -t $CI_REGISTRY_USER/lodl-stock-business -f business/Dockerfile business
+          docker build --pull -t $CI_REGISTRY_USER/lodl-stock-business -f business/Dockerfile .
           docker push $CI_REGISTRY_USER/lodl-stock-business
-          docker build --pull -t $CI_REGISTRY_USER/lodl-stock-mailer -f mailer/Dockerfile mailer
+          docker build --pull -t $CI_REGISTRY_USER/lodl-stock-mailer -f mailer/Dockerfile .
           docker push $CI_REGISTRY_USER/lodl-stock-mailer
