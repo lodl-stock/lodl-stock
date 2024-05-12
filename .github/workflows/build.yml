@@ -2,6 +2,13 @@ name: Docker Build
 
 on:
   workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - './auth'
+      - './business'
+      - './mailer'
+      - './db'
 
 jobs:
   build:
