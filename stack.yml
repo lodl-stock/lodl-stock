@@ -2,10 +2,10 @@ version: "3.8"
 services:
   auth:
     hostname: auth
-    container_name: auth 
+    container_name: auth
     image: mariateaca/lodl-stock-auth:latest
     volumes:
-      - './auth/src:/app/src'
+      # - './auth/src:/app/src'
       - '/app/node_modules'
     environment:
       PORT: ${AUTH_PORT}
@@ -22,14 +22,14 @@ services:
       - auth_business
       - auth_mailer
       - prometheus
-      - network_kong 
+      - network_kong
 
   business:
     hostname: business
     container_name: business
     image: mariateaca/lodl-stock-business:latest
     volumes:
-      - './business/src:/app/src'
+      # - './business/src:/app/src'
       - '/app/node_modules'
     environment:
       PORT: ${BUSINESS_PORT}
@@ -44,14 +44,14 @@ services:
       - db_business
       - auth_business
       - prometheus
-      - network_kong 
+      - network_kong
 
   mailer:
     hostname: mailer
-    container_name: mailer 
+    container_name: mailer
     image: mariateaca/lodl-stock-mailer:latest
     volumes:
-      - './mailer/src:/app/src'
+      # - './mailer/src:/app/src'
       - '/app/node_modules'
     environment:
       PORT: ${MAILER_PORT}
@@ -69,11 +69,13 @@ services:
       - db_mailer
       - auth_mailer
       - prometheus
-      - network_kong 
+      - network_kong
 
   mariadb:
     deploy:
       replicas: 1
+      placement:
+        constraints: [node.role == manager]
     image: mariadb:latest
     environment:
       MYSQL_USER: ${DB_USER}
@@ -93,6 +95,10 @@ services:
   dbadmin:
     hostname: dbadmin
     container_name: dbadmin
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
     image: phpmyadmin
     depends_on:
       - mariadb
@@ -101,16 +107,20 @@ services:
       PMA_PORT: 3306
     networks:
       - db_admin
-      - network_kong 
+      - network_kong
     ports:
       - "8080:80"
 
   prometheus:
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
     image: prom/prometheus:latest
     container_name: prometheus
     volumes:
       - prom_data:/prometheus
-      - ./prometheus:/etc/prometheus
+      - /home/lodl/lodl-stock/prometheus:/etc/prometheus
     ports:
       - "9090:9090"
     networks:
@@ -122,6 +132,10 @@ services:
       - mailer
 
   grafana:
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
     image: grafana/grafana:latest
     container_name: grafana
     depends_on:
@@ -133,15 +147,15 @@ services:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_USER}
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASS}
     volumes:
-      - ./grafana:/etc/grafana/provisioning/datasources
+      - /home/lodl/lodl-stock//grafana:/etc/grafana/provisioning/datasources
       - grafana-storage:/var/lib/grafana
     networks:
       - network_grafana
-      - network_kong 
+      - network_kong
 
   kong:
     image: kong:latest
-    container_name: kong 
+    container_name: kong
     depends_on:
       - prometheus
       - grafana
@@ -163,7 +177,7 @@ services:
     volumes:
       - ./Kong:/opt/kong
     networks:
-      - network_kong 
+      - network_kong
       - network_grafana
 
 networks:
