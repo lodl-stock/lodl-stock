@@ -11,11 +11,13 @@ jobs:
         uses: appleboy/ssh-action@v0.1.2
         with:
           key: ${{secrets.SSH_PRIVATE_KEY}}
-          host: ${{secrets.DOCKER_PG_URL}}
+          host: ${{secrets.HOST}}
+          username: ${{secrets.USER}}
           debug: true
           script: |
-            ls lodl-stock || git pull https://github.com/lodl-stock/lodl-stock.git
-            cd lodk-stock/
+            cd /home/${{secrets.USER}}
+            ls lodl-stock || git clone https://github.com/lodl-stock/lodl-stock.git
+            cd lodl-stock/
             git checkout main
             git fetch origin
             git reset --hard origin/main
