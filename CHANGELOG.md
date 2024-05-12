@@ -7,6 +7,45 @@ Changes are prefaced by contributor initials:
 - Maria Teaca: MT
 - Stefan Pantucu: SP
 
+## [0.1.0] - 2024-05-12
+
+### Added
+
+- [SP] Added Kong API Gateway
+
+### Changed
+
+- [MT] Moved to DigitalOcean from Docker Playground
+
+### Fixed
+
+- [SP] Fixed GitHub Actions
+- [SP/MT] Small fixes
+
+## [0.0.6] - 2024-05-11
+
+### Added
+
+- [SP] Added Grafana configuration files
+- [MT] Added provisionary GitHub Actions
+
+
+## [0.0.5] - 2024-05-07
+
+### Added
+
+- [MT] Added a small testing module
+- [SP] Added stock manipulation routes
+- [MT] Added Prometheus configuration files
+
+### Changed
+
+- [MT] Updated environment variables
+
+### Fixed
+
+- [MT] Fixed stock rendering routes
+
 ## [0.0.4] - 2024-04-20
 
 ### Added
