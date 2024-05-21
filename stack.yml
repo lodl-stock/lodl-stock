@@ -14,7 +14,7 @@ services:
       - mariadb
     # Auth service should start first after db service, so let it update
     # database schema
-    command: bash -c "sleep 10 ; npx prisma db push --accept-data-loss && npm run server:watch"
+    command: bash -c "sleep 10 ; npx prisma db push --accept-data-loss && npm run server"
     networks:
       - db_auth
       - auth_business
@@ -34,7 +34,7 @@ services:
     depends_on:
       - mariadb
       - auth
-    command: bash -c "sleep 10 ; npm run server:watch"
+    command: bash -c "sleep 10 ; npm run server"
     networks:
       - db_business
       - auth_business
@@ -56,7 +56,7 @@ services:
       - mariadb
       - business
       - auth
-    command: bash -c "sleep 10 ; npm run server:watch"
+    command: bash -c "sleep 10 ; npm run server"
     networks:
       - db_mailer
       - auth_mailer
