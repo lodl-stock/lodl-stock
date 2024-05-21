@@ -112,7 +112,7 @@ services:
     container_name: prometheus
     volumes:
       - prom_data:/prometheus
-      - /home/lodl/lodl-stock/prometheus:/etc/prometheus
+      - /root/lodl-stock/prometheus:/etc/prometheus
     ports:
       - "9090:9090"
     networks:
@@ -139,7 +139,7 @@ services:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_USER}
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASS}
     volumes:
-      - /home/lodl/lodl-stock/grafana:/etc/grafana/provisioning/datasources
+      - /root/lodl-stock/grafana:/etc/grafana/provisioning/datasources
       - grafana-storage:/var/lib/grafana
     networks:
       - network_grafana
@@ -167,7 +167,7 @@ services:
       KONG_DECLARATIVE_CONFIG: /opt/kong/kong.yml
     command: "kong start"
     volumes:
-      - /home/lodl/lodl-stock/Kong:/opt/kong
+      - /root/lodl-stock/Kong:/opt/kong
     networks:
       - network_kong
       - network_grafana

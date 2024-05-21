@@ -7,9 +7,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  pull-code:
-    uses: ./.github/workflows/pull.yaml
-    secrets: inherit
   build:
     runs-on: ubuntu-latest
 
@@ -19,4 +16,4 @@ jobs:
 
       - name: Deploy through Portainer on DigitalOcean
         run: |
-          curl -k -XPOST http://104.248.131.77:9000/api/stacks/webhooks/7898ce5d-34ed-4112-a141-f94bf64d1917
+          curl -k -XPOST https://ip172-18-0-123-cp68388l2o9000dcg460-9443.direct.labs.play-with-docker.com/api/stacks/webhooks/a8cc09bc-6879-441f-870f-a9b5eb1b54ec
